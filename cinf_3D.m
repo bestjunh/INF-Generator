@@ -74,13 +74,18 @@ for m = 1:M
 end
 
 % Initialize waitbar
-waitbar(0,'Generating sensor signals...');
+%waitbar(0,'Generating sensor signals...');
 
 % Calculate sensor signals in the frequency domain
 for phi_idx = 1:N_phi
     waitbar(phi_idx/N_phi);
 
-    X_prime = randn(1,NFFT/2+1) + 1i*randn(1,NFFT/2+1);    
+    tmp = pinknoise(NFFT);
+    X_prime = fft(tmp).';
+    X_prime = X_prime(1:NFFT/2+1);
+
+    %X_prime = randn(1,NFFT/2+1) + 1i*randn(1,NFFT/2+1);    
+
     X(1,:) = X(1,:) + X_prime;
     v = [cos(phi(phi_idx)) ; sin(phi(phi_idx)) ; 0];    
     for m = 2:M
@@ -99,4 +104,4 @@ z = real(ifft(X,NFFT,2));
 z = z(:,1:len);
 
 % Close waitbar
-waitbar;
+%waitbar;

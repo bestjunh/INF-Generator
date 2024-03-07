@@ -92,8 +92,12 @@ h = waitbar(0,'Generating sensor signals...');
 % Calculate sensor signals in the frequency domain
 for idx = 1:N
     waitbar(idx/N);
+
+    x = audioread(params.signalFileName{idx});
+    X_prime = fft(x);
+    X_prime = X_prime(1:NFFT/2+1).';
     
-    X_prime = randn(1,NFFT/2+1) + 1i*randn(1,NFFT/2+1);
+    %X_prime = randn(1,NFFT/2+1) + 1i*randn(1,NFFT/2+1);
     X(1,:) = X(1,:) + X_prime;
     for m = 2:M
         v = [cos(theta(idx))*sin(phi(idx)) ; sin(theta(idx))*sin(phi(idx)) ; cos(phi(idx))];
